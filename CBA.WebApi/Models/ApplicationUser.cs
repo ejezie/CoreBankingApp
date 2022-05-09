@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
+using CBA.Core.Enums;
 using Microsoft.AspNetCore.Identity;
 
 namespace CBA.Core.Models
@@ -12,6 +13,10 @@ namespace CBA.Core.Models
         [Required]
         [Display(Name = " Last Name")]
         public string LastName { get; set; }
+        [Required]
+        public Gender Gender { get; set; }
+
+        //public string UserName { get; set; }
         //[Required]
         //public string Email { get; set; }
         //public string NormalizedEmail { get; set; }

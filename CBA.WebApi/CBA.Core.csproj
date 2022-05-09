@@ -11,8 +11,9 @@
     <None Remove="Microsoft.EntityFrameworkCore" />
     <None Remove="Microsoft.EntityFrameworkCore.SqlServer" />
     <None Remove="Microsoft.EntityFrameworkCore.Design" />
-    <None Remove="Models\ViewModels\" />
     <None Remove="Microsoft.AspNetCore.Identity.EntityFrameworkCore" />
+    <None Remove="Models\ViewModels\" />
+    <None Remove="Microsoft.NETCore.App" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Enums\" />
@@ -28,5 +29,6 @@
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="5.0.0" />
+    <PackageReference Include="Microsoft.NETCore.App" Version="2.2.8" />
   </ItemGroup>
 </Project>

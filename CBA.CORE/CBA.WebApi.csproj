@@ -38,13 +38,13 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\CBA.WebApi\CBA.Core.csproj">
+    <ProjectReference Include="..\CBA.Services\CBA.Services.csproj">
+      <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
+    </ProjectReference>
+    <ProjectReference Include="..\CBA.WebApi\CBA.CORE.csproj">
       <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
     </ProjectReference>
     <ProjectReference Include="..\CBA.DATA\CBA.DATA.csproj">
-      <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
-    </ProjectReference>
-    <ProjectReference Include="..\CBA.Services\CBA.Services.csproj">
       <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
     </ProjectReference>
   </ItemGroup>
@@ -54,6 +54,7 @@
     <Folder Include="Views\Shared\" />
     <Folder Include="Views\Home\" />
     <Folder Include="Views\Error\" />
+    <Folder Include="Views\Account\" />
   </ItemGroup>
   <Target Name="DebugEnsureNodeEnv" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(SpaRoot)node_modules') ">
     <!-- Ensure Node.js is installed -->

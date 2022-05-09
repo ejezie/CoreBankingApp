@@ -34,7 +34,7 @@ namespace CBA.DATA
 
                 if (!context.Roles.Any(r => r.Name == role))
                 {
-                    await roleStore.CreateAsync(new IdentityRole { Name = role, NormalizedName = role });
+                    await roleStore.CreateAsync(new IdentityRole { Name = role, NormalizedName = role.ToUpper() });
                 }
             }
 
@@ -68,4 +68,3 @@ namespace CBA.DATA
     }
 
 }
-

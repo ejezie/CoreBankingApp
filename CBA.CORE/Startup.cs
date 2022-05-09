@@ -3,14 +3,19 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using CBA.Core.Models;
 using CBA.Data;
 using CBA.Data.Implementations;
 using CBA.Data.Interfaces;
 using CBA.DATA;
+using CBA.Services.Implementations;
+using CBA.Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -36,11 +41,21 @@ namespace CBA.WebApi
         {
             services.AddControllers();
             services.AddMvc();
+            //config => {
+            //    var policy = new AuthorizationPolicyBuilder()
+            //                    .RequireAuthenticatedUser()
+            //                    .Build();
+            //    config.Filters.Add(new AuthorizeFilter(policy));
+            //}
+
             services.AddDbContextPool<AppDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
-            services.AddIdentity<IdentityUser, IdentityRole>()
+            services.AddIdentity<ApplicationUser, IdentityRole>()
             .AddEntityFrameworkStores<AppDbContext>();
             services.AddTransient<AppUserSeedData>();
+            services.AddTransient<IService, Service>();
             services.AddTransient<ICustomerDao, CustomerDao>();
+            
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

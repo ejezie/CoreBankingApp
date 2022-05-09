@@ -1,0 +1,46 @@
+﻿@model CBA.CORE.Models.ViewModels.AddUserViewModel
+@using CBA.Core.Enums
+
+@{
+    ViewBag.Title = "Add User";
+}
+
+<h3>Add New User</h3>
+
+<div class="row">
+    <div class="col-md-12">
+        <form method="post">
+            <div asp-validation-summary="All" class="text-danger"></div>
+
+            <input hidden asp-for="Username" class="form-control" />
+
+            <div class="form-group">
+                <label asp-for="FirstName"></label>
+                <input asp-for="FirstName" class="form-control" />
+                <span asp-validation-for="FirstName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="LastName"></label>
+                <input asp-for="LastName" class="form-control" />
+                <span asp-validation-for="LastName" class="text-danger"></span>
+            </div>
+            <div class="form-group row">
+                <label asp-for="Gender" class="col-sm-2 col-form-label"></label>
+                <div class="col-sm-10">
+                    <select asp-for="Gender" class="custom-select mr-sm-2"
+                            asp-items="Html.GetEnumSelectList<Gender>()">
+                        <option value="">Please Select</option>
+                    </select>
+                    <span asp-validation-for="Gender" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label asp-for="Email"></label>
+                <input asp-for="Email" class="form-control" />
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+            <input hidden asp-for="Password" class="form-control" />
+            <button type="submit" class="btn btn-primary">Add User</button>
+        </form>
+    </div>
+</div>
