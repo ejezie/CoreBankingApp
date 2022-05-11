@@ -2,7 +2,7 @@
 
 namespace CBA.DATA.Migrations
 {
-    public partial class IdentityRoleUser : Migration
+    public partial class SeedData : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

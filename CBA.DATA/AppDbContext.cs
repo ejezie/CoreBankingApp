@@ -6,14 +6,14 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace CBA.Data
 {
-    public class AppDbContext : IdentityDbContext
+    public class AppDbContext : IdentityDbContext<ApplicationUser>
     {
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
         {
-
+            
         }
         public DbSet<Customer> Customers { get; set; }
-        public DbSet<ApplicationUser> ApplicationUsers { get; set; }
+        //public DbSet ApplicationUsers { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -23,8 +23,8 @@ namespace CBA.Data
                    new Customer
                    {
                        Id = 1,
-                       FirstName = "Super",
-                       LastName = "User",
+                       FirstName = "James",
+                       LastName = "Bond",
                        Gender = Core.Enums.Gender.any,
                        Role = Core.Enums.Roles.SuperAdmin,
                    }

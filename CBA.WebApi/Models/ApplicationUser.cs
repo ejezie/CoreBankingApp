@@ -16,6 +16,8 @@ namespace CBA.Core.Models
         [Required]
         public Gender Gender { get; set; }
 
+        //public bool? IsEnabled { get; set; }
+
         //public string UserName { get; set; }
         //[Required]
         //public string Email { get; set; }

@@ -1,0 +1,53 @@
+﻿@model CBA.CORE.Models.ViewModels.EditUserViewModel
+@using CBA.Core.Enums
+
+@{
+    ViewBag.Title = "Edit User";
+}
+
+<h3>Edit User</h3>
+
+<div class="row">
+    <div class="col-md-12">
+        <form method="post" asp-action="edituser" asp-controller="administration">
+            <div asp-validation-summary="All" class="text-danger"></div>
+
+            <input asp-for="Username" class="form-control" />
+
+            <div class="form-group">
+                <label asp-for="FirstName"></label>
+                <input asp-for="FirstName" class="form-control" />
+                <span asp-validation-for="FirstName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="LastName"></label>
+                <input asp-for="LastName" class="form-control" />
+                <span asp-validation-for="LastName" class="text-danger"></span>
+            </div>
+            <div class="form-group row">
+                <label asp-for="Gender" class="col-sm-2 col-form-label"></label>
+                <div class="col-sm-10">
+                    <select asp-for="Gender" class="custom-select mr-sm-2"
+                            asp-items="Html.GetEnumSelectList<Gender>()">
+                        <option value="">Please Select</option>
+                    </select>
+                    <span asp-validation-for="Gender" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label asp-for="Email"></label>
+                <input asp-for="Email" class="form-control" />
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Submit Edit</button>
+            <a asp-controller="administration" asp-action="listuser" class="btn btn-primary">Cancel</a>
+            <a asp-action="ManageUserRoles" asp-route-Id="@Model.Id"
+               class="btn btn-primary">
+                Manage Roles
+            </a>
+
+        </form>
+
+    </div>
+</div>

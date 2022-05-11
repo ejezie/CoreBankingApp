@@ -11,10 +11,12 @@ namespace CBA.DATA
     public class AppUserSeedData
     {
         private readonly AppDbContext context;
+        private readonly UserManager<ApplicationUser> userManager;
 
-        public AppUserSeedData(AppDbContext _context)
+        public AppUserSeedData(AppDbContext _context, UserManager<ApplicationUser> userManager)
         {
             context = _context;
+            this.userManager = userManager;
         }
 
         public async Task SeedAdminUserAndRoles()
@@ -25,14 +27,15 @@ namespace CBA.DATA
                  "tester",
                  "manager",
                  "auditor",
-                 "developer"
+                 "developer",
+                 "user"
             };
 
             foreach (string role in roles)
             {
                 var roleStore = new RoleStore<IdentityRole>(context);
 
-                if (!context.Roles.Any(r => r.Name == role))
+                if (context.Roles.Any(r => r.Name == role))
                 {
                     await roleStore.CreateAsync(new IdentityRole { Name = role, NormalizedName = role.ToUpper() });
                 }
@@ -52,14 +55,14 @@ namespace CBA.DATA
                 SecurityStamp = Guid.NewGuid().ToString("D")
             };
 
-            if (!context.Users.Any(u => u.UserName == user.UserName))
+            if (context.Users.Any(u => u.UserName == user.UserName))
             {
                 var password = new PasswordHasher<ApplicationUser>();
                 var hashed = password.HashPassword(user, "password");
                 user.PasswordHash = hashed;
                 var userStore = new UserStore<ApplicationUser>(context);
                 await userStore.CreateAsync(user);
-                await userStore.AddToRoleAsync(user, "admin");
+                await userManager.AddToRoleAsync(user, "ADMIN");
             }
 
             await context.SaveChangesAsync();
