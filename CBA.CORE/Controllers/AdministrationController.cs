@@ -1,9 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using CBA.Core.Models;
+using CBA.CORE.Models;
 using CBA.CORE.Models.ViewModels;
+using CBA.DATA;
+using CBA.Core.Enums;
 using CBA.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -20,10 +24,10 @@ namespace CBA.WebApi.Controllers
         private readonly UserManager<ApplicationUser> userManager;
         private readonly SignInManager<ApplicationUser> signInManager;
         private readonly IService iserviceImplement;
-        private readonly RoleManager<IdentityRole> roleManager;
+        private readonly RoleManager<ApplicationRole> roleManager;
 
 
-        public AdministrationController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, IService _iserviceImplement, RoleManager<IdentityRole> roleManager)
+        public AdministrationController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, IService _iserviceImplement, RoleManager<ApplicationRole> roleManager)
         {
             this.userManager = userManager;
             this.signInManager = signInManager;
@@ -31,7 +35,7 @@ namespace CBA.WebApi.Controllers
             iserviceImplement = _iserviceImplement;
         }
 
-        public IActionResult NotFound()
+        public new IActionResult NotFound()
         {
             return View();
         }
@@ -72,7 +76,7 @@ namespace CBA.WebApi.Controllers
                 if (result.Succeeded)
                 {
                     await signInManager.SignInAsync(user, isPersistent: false);
-                    return RedirectToAction("listuser", "administrator");
+                    return RedirectToAction("listusers", "administration");
                 }
 
                 // If there are any errors, add them to the ModelState object
@@ -86,7 +90,7 @@ namespace CBA.WebApi.Controllers
         }
 
         
-        public IActionResult ListUsers()
+        public IActionResult  ListUsers()
         {
             var users = userManager.Users;
             return View(users);
@@ -114,6 +118,7 @@ namespace CBA.WebApi.Controllers
                 Gender = user.Gender,
                 Email = user.Email,
                 Id = user.Id,
+                //IsEnabled = user.IsEnable,
             };
 
             return View(editUser);
@@ -132,6 +137,7 @@ namespace CBA.WebApi.Controllers
                 user.LastName = model.LastName;
                 user.Gender = model.Gender;
                 user.Email = model.Email;
+                //user.IsEnable = model.IsEnabled;
 
                 var result = await userManager.UpdateAsync(user);
 
@@ -164,17 +170,17 @@ namespace CBA.WebApi.Controllers
             if (ModelState.IsValid)
             {
                 // We just need to specify a unique role name to create a new role
-                IdentityRole identityRole = new IdentityRole
+                ApplicationRole applicationRole = new ApplicationRole
                 {
                     Name = model.RoleName
                 };
 
                 // Saves the role in the underlying AspNetRoles table
-                IdentityResult result = await roleManager.CreateAsync(identityRole);
+                IdentityResult result = await roleManager.CreateAsync(applicationRole);
 
                 if (result.Succeeded)
                 {
-                    return RedirectToAction("listroles", "account");
+                    return RedirectToAction("listroles", "administration");
                 }
 
                 foreach (IdentityError error in result.Errors)
@@ -201,6 +207,7 @@ namespace CBA.WebApi.Controllers
         public async Task<IActionResult> EditRole(string id)
         {
             var role = await roleManager.FindByIdAsync(id);
+            var roleClaims = await roleManager.GetClaimsAsync(role);
 
             if (role == null)
             {
@@ -211,7 +218,9 @@ namespace CBA.WebApi.Controllers
             var model = new EditRoleViewModel
             {
                 Id = role.Id,
-                RoleName = role.Name
+                RoleName = role.Name,
+                State = role.State,
+                Claims = roleClaims.Select(rc => rc.Value).ToList(),
             };
 
             foreach (var user in userManager.Users)
@@ -219,10 +228,15 @@ namespace CBA.WebApi.Controllers
                 // If the user is in this role, add the username to
                 // Users property of EditRoleViewModel. This model
                 // object is then passed to the view for display
-                if (await userManager.IsInRoleAsync(user, role.Name))
+                if (await userManager.IsInRoleAsync(user, role.Name) && role.State == State.Enabled)
                 {
                     model.Users.Add(user.UserName);
                 }
+                else
+                {
+                    continue;
+                }
+               
             }
 
             return View(model);
@@ -231,6 +245,7 @@ namespace CBA.WebApi.Controllers
         public async Task<IActionResult> EditRole(EditRoleViewModel model)
         {
             var role = await roleManager.FindByIdAsync(model.Id);
+            //var user = await userManager.FindByIdAsync(model.Id);
 
             if (role == null)
             {
@@ -240,9 +255,14 @@ namespace CBA.WebApi.Controllers
             else
             {
                 role.Name = model.RoleName;
+                role.State = model.State;
+
 
                 //Update role in database
                 var result = await roleManager.UpdateAsync(role);
+                    //var lockoutEndDate = new DateTime(2999, 01, 01);
+                    //await userManager.SetLockoutEnabledAsync(user, true);
+                    //await userManager.SetLockoutEndDateAsync(user, lockoutEndDate);
 
                 if (result.Succeeded)
                 {
@@ -409,6 +429,58 @@ namespace CBA.WebApi.Controllers
             return RedirectToAction("EditUser", new { Id });
         }
 
+        //CLAIMS
+       
+        [HttpGet]
+        public async Task<IActionResult> ManageRoleClaims(string id)
+        {
+            var role = await roleManager.FindByIdAsync(id);
+            if (role == null)
+            {
+                ViewBag.ErrorMessage = $"Role with Id = {id} cannot be found";
+                return View("NotFound");
+            }
+            var existingRoleClaims = await roleManager.GetClaimsAsync(role);
+            var model = new RoleClaimsViewModel
+            {
+                //Id = role.Id,
+                Id = id
+            };
+            foreach (Claim claim in ClaimsStore.AllClaims)
+            {
+                RoleClaim roleClaim = new RoleClaim
+                {
+                    ClaimType = claim.Type
+                };
+                if (existingRoleClaims.Any(c => c.Type == claim.Type))
+                {
+                    roleClaim.IsSelected = true;
+                }
+                model.Cliams.Add(roleClaim);
+            }
+            return View(model);
+        }
 
+        [HttpPost]
+        public async Task<IActionResult> ManageRoleClaims(RoleClaimsViewModel model)
+        {
+            var role = await roleManager.FindByIdAsync(model.Id);
+            if (role == null)
+            {
+                ViewBag.ErrorMessage = $"Role with Id = {model.Id} cannot be found";
+                return View("NotFound");
+            }
+            var claims = await roleManager.GetClaimsAsync(role);
+            foreach (var claim in claims)
+            {
+                await roleManager.RemoveClaimAsync(role, claim);
+            }
+            var selectedClaims = model.Cliams.Where(c => c.IsSelected).Select(c => new Claim(c.ClaimType, c.ClaimType));
+            foreach (var claim in selectedClaims)
+            {
+                await roleManager.AddClaimAsync(role, claim);
+            }
+            return RedirectToAction("listroles");
+        }
     }
 }

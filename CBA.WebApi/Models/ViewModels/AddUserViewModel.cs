@@ -1,10 +1,11 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 using CBA.Core.Enums;
+using CBA.Core.Models;
 
 namespace CBA.CORE.Models.ViewModels
 {
-    public class AddUserViewModel
+    public class AddUserViewModel 
     {
         public string Username { get; set; }
 
@@ -28,6 +29,9 @@ namespace CBA.CORE.Models.ViewModels
         public string Email { get; set; }
 
         public string Password { get; set; }
+
+        //public bool? IsEnable { get; set; } = true;
+
         //public string PasswordHash { get; set; }
     }
 }

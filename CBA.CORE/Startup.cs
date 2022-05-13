@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using CBA.Core.Models;
+using CBA.CORE.Models;
 using CBA.Data;
 using CBA.Data.Implementations;
 using CBA.Data.Interfaces;
@@ -49,7 +50,7 @@ namespace CBA.WebApi
             //}
 
             services.AddDbContextPool<AppDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
-            services.AddIdentity<ApplicationUser, IdentityRole>()
+            services.AddIdentity<ApplicationUser, ApplicationRole>()
             .AddEntityFrameworkStores<AppDbContext>();
             services.AddTransient<AppUserSeedData>();
             services.AddTransient<IService, Service>();

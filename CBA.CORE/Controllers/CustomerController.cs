@@ -44,7 +44,6 @@ namespace CBA.WebApi.Controllers
                     FirstName = model.FirstName,
                     LastName = model.LastName,
                     Gender = model.Gender,
-                    Role = model.Role
                 };
 
                 _customerdaoimplement.Save(newCustomer);
@@ -74,7 +73,6 @@ namespace CBA.WebApi.Controllers
             {
                 FirstName = customer.FirstName,
                 LastName = customer.LastName,
-                Role = customer.Role,
                 Gender = customer.Gender
             };
             return View(editUserViewModel);
@@ -91,7 +89,7 @@ namespace CBA.WebApi.Controllers
                 customer.FirstName = model.FirstName;
                 customer.LastName = model.LastName;
                 customer.Gender = model.Gender;
-                customer.Role = model.Role;
+               
 
                 Customer updatedCustomer = _customerdaoimplement.UpdateCustomer(customer);
 

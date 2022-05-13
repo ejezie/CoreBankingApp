@@ -23,9 +23,14 @@
             </div>
             <div class="card-footer">
                 <a asp-controller="Administration" asp-action="EditRole"
-                   asp-route-id="@role.Id" class="btn btn-primary" style="border-radius: 20px;">
+                   asp-route-id="@role.Id" class="btn btn-primary" style="border-radius: 20px; margin-right: 1rem;">
                     Edit Role
                 </a>
+                <a asp-action="ManageRoleClaims" asp-route-id="@role.Id"
+                   style="width:auto" class="btn btn-primary">
+                    Manage Claims
+                </a>
+               
                 @*<a href="#" class="btn btn-danger">Disable</a>*@
             </div>
         </div>

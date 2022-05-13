@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using CBA.Core.Models;
+using CBA.CORE.Models;
 using CBA.CORE.Models.ViewModels;
 using CBA.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
@@ -19,10 +20,10 @@ namespace CBA.WebApi.Controllers
         private readonly UserManager<ApplicationUser> userManager;
         private readonly SignInManager<ApplicationUser> signInManager;
         private readonly IService iserviceImplement;
-        private readonly RoleManager<IdentityRole> roleManager;
+        private readonly RoleManager<ApplicationRole> roleManager;
 
 
-        public AccountController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, IService _iserviceImplement, RoleManager<IdentityRole> roleManager)
+        public AccountController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, IService _iserviceImplement, RoleManager<ApplicationRole> roleManager)
         {
             this.userManager = userManager;
             this.signInManager = signInManager;
@@ -65,13 +66,16 @@ namespace CBA.WebApi.Controllers
 
                 if (result.Succeeded)
                 {
+
                     return RedirectToAction("index", "home");
+
                 }
                 ModelState.AddModelError(String.Empty, "Login attempt failed, please check that your details are correct");
 
             }
             return View(model);
         }
+
 
     }
 }

@@ -2,11 +2,12 @@
 using CBA.Core.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using CBA.CORE.Models;
 //using CBA.DATA;
 
 namespace CBA.Data
 {
-    public class AppDbContext : IdentityDbContext<ApplicationUser>
+    public class AppDbContext : IdentityDbContext<ApplicationUser, ApplicationRole,string>
     {
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
         {
@@ -26,7 +27,6 @@ namespace CBA.Data
                        FirstName = "James",
                        LastName = "Bond",
                        Gender = Core.Enums.Gender.any,
-                       Role = Core.Enums.Roles.SuperAdmin,
                    }
             );
         }

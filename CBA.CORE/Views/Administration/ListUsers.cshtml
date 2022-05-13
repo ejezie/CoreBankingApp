@@ -20,12 +20,16 @@
                 User Id : @user.Id || @user.LastName @user.FirstName
             </div>
             <div class="card-body">
-                <h5 class="card-title">User Name: @user.UserName</h5> <br/>
+                <h5 class="card-title">User Name: @user.UserName</h5> <br />
                 <h5 class="card-title">Email: @user.Email</h5>
+                @*<input asp-for="@user.IsEnable" class="form-check-input" id="flexCheckDefault" />
+                <label class="form-check-label" asp-for="@user.IsEnable">
+                    Enable or disable user
+                </label>*@
             </div>
             <div class="card-footer">
                 <a asp-action="edituser" asp-controller="administration" asp-route-id="@user.Id" class="btn btn-primary">Edit</a>
-                <a href="#" class="btn btn-primary">Disable</a>
+                @*<a href="#" class="btn btn-primary">Disable</a>*@
             </div>
         </div>
     }

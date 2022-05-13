@@ -18,7 +18,5 @@ namespace CBA.Core.Models
         public string LastName { get; set; }
         [Required]
         public Gender Gender { get; set; }
-        [Required]
-        public Roles Role { get; set; }
     }
 }

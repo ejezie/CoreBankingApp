@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using CBA.Core.Enums;
 
 namespace CBA.CORE.Models.ViewModels
 {
@@ -10,6 +11,8 @@ namespace CBA.CORE.Models.ViewModels
         public EditRoleViewModel()
         {
             Users = new List<string>();
+            Claims = new List<string>();
+
         }
 
         public string Id { get; set; }
@@ -19,5 +22,10 @@ namespace CBA.CORE.Models.ViewModels
         public string RoleName { get; set; }
 
         public List<string> Users { get; set; }
+
+        public List<string> Claims { get; set; }
+
+        public State State { get; set; }
+
     }
 }
