@@ -141,7 +141,32 @@ namespace CBA.WebApi.Controllers
 
             return View(editUser);
         }
+        [HttpPost]
+        public async Task<IActionResult> EditUserPassword(EditUserViewModel model)
+        {
+            var user = await userManager.FindByIdAsync(model.Id);
 
+            var password = iserviceImplement.GeneratePassword();
+            var passHasher = new PasswordHasher<ApplicationUser>();
+            var hashed = passHasher.HashPassword(user, password);
+
+            await userManager.RemovePasswordAsync(user);
+            var result = await userManager.AddPasswordAsync(user, hashed);
+
+            var mail = new MailRequest
+            {
+                ToEmail = model.Email,
+                Subject = model.LastName,
+                Body = password,
+            };
+
+            if (result.Succeeded)
+            {
+                await iserviceImplement.SendEmailAsync(mail);
+                return RedirectToAction("listusers", "administration");
+            }
+            return View();
+        }
         [HttpPost]
         public async Task<IActionResult> EditUser(EditUserViewModel model)
         {
