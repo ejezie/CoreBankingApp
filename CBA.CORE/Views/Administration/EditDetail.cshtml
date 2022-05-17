@@ -1,0 +1,31 @@
+﻿@model EditDetailRoleViewModel
+@{
+
+}
+
+<div class="card">
+    <div class="card-header">
+        Role Name: @Model.RoleName
+    </div>
+    <div class="card-body" style="display: flex; flex-direction: column">
+        <h5 style="margin-bottom: 1rem;" class="card-title">Role is @Model.State</h5>
+
+        @*<a href="#" class="btn btn-primary">Go somewhere</a>*@
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-header">
+        Claims in Role :
+    </div>
+    <div class="card-body" style="display: flex; flex-direction: column">
+
+        @foreach (var user in Model.Users)
+        {
+            <p style="border-bottom: 1px solid white;">- @user.Value</p>
+        }
+
+    </div>
+</div>
+
+<a asp-action="listroles" asp-controller="administration" class="btn btn-primary">Go Back</a>

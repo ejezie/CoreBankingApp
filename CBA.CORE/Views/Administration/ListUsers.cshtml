@@ -29,7 +29,7 @@
             </div>
             <div class="card-footer">
                 <a asp-action="edituser" asp-controller="administration" asp-route-id="@user.Id" class="btn btn-primary">Edit</a>
-                @*<a href="#" class="btn btn-primary">Disable</a>*@
+                <a asp-action="detailuser" asp-controller="administration" asp-route-id="@user.Id" class="btn btn-primary">Details</a>
             </div>
         </div>
     }

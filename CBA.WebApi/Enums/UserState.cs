@@ -1,9 +1,9 @@
 ﻿using System;
-namespace CBA.CORE.Enums
+namespace CBA.Core.Enums
 {
     public enum UserState
     {
-       isEnabled,
-       isDisabled
+       Enabled,
+       Disabled
     }
 }

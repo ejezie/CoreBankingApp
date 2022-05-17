@@ -1,0 +1,47 @@
+﻿@model DetailsUserViewModel
+
+@{
+    @*@Model.pageTitle*@
+}
+
+<div class="card">
+    <div class="card-header">
+        User Name: @Model.User.UserName
+    </div>
+    <div class="card-body">
+        <h5 class="card-title">Full Name: @Model.User.FirstName @Model.User.LastName</h5>
+        <p class="card-text">Email: @Model.User.Email</p>
+        @*<a href="#" class="btn btn-primary">Go somewhere</a>*@
+    </div>
+</div>
+<div class="card">
+    <div class="card-header">
+        User is @Model.User.UserState
+    </div>
+    <div class="card-body">
+
+        <h5 class="card-title">Gender: @Model.User.Gender</h5>
+
+    </div>
+</div>
+<div class="card">
+    <div class="card-header">
+        User Roles:
+    </div>
+    <div class="card-body" style="display:flex; flex-direction:column">
+
+        @foreach (var role in Model.Roles)
+            if (role.Any())
+            {
+                <p style="border-bottom: 1px solid white;">- @role</p>
+
+            }
+            else
+            {
+                <p>None at the moment</p>
+            }
+
+    </div>
+</div>
+
+<a asp-action="listusers" asp-controller="administration" class="btn btn-primary">Go Back</a>

@@ -75,9 +75,6 @@ namespace CBA.DATA.Migrations
                     b.Property<int>("Gender")
                         .HasColumnType("int");
 
-                    b.Property<bool>("IsEnable")
-                        .HasColumnType("bit");
-
                     b.Property<string>("LastName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -114,6 +111,9 @@ namespace CBA.DATA.Migrations
                     b.Property<string>("UserName")
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
+
+                    b.Property<int>("UserState")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 

@@ -55,7 +55,7 @@ namespace CBA.WebApi
             services.AddTransient<AppUserSeedData>();
             services.AddTransient<IService, Service>();
             services.AddTransient<ICustomerDao, CustomerDao>();
-            
+            services.Configure<MailSettings>(Configuration.GetSection("MailSettings"));
 
         }
 

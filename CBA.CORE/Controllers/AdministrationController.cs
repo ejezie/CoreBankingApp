@@ -12,6 +12,7 @@ using CBA.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections;
 
 // For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -72,10 +73,18 @@ namespace CBA.WebApi.Controllers
 
                 var result = await userManager.CreateAsync(user, hashed);
 
+                var mail = new MailRequest
+                {
+                    ToEmail = model.Email,
+                    Subject = model.LastName,
+                    Body = password,
+                };
+
                 // On succesful login redirect to home page
                 if (result.Succeeded)
                 {
                     await signInManager.SignInAsync(user, isPersistent: false);
+                    await iserviceImplement.SendEmailAsync(mail);
                     return RedirectToAction("listusers", "administration");
                 }
 
@@ -88,11 +97,20 @@ namespace CBA.WebApi.Controllers
 
             return View(model);
         }
-
-        
-        public IActionResult  ListUsers()
+     
+        public IActionResult ListUsers()
         {
             var users = userManager.Users;
+
+            //foreach(var user in users)
+            //{
+            //    if(user.UserState == UserState.Disabled)
+            //    {
+            //        var lockoutEndDate = new DateTime(2999, 01, 01);
+            //        await userManager.SetLockoutEnabledAsync(user, true);
+            //        await userManager.SetLockoutEndDateAsync(user, lockoutEndDate);
+            //    }
+            //}
             return View(users);
         }
 
@@ -118,7 +136,7 @@ namespace CBA.WebApi.Controllers
                 Gender = user.Gender,
                 Email = user.Email,
                 Id = user.Id,
-                //IsEnabled = user.IsEnable,
+                UserState = user.UserState,
             };
 
             return View(editUser);
@@ -137,9 +155,20 @@ namespace CBA.WebApi.Controllers
                 user.LastName = model.LastName;
                 user.Gender = model.Gender;
                 user.Email = model.Email;
-                //user.IsEnable = model.IsEnabled;
+                user.UserState = model.UserState;
 
                 var result = await userManager.UpdateAsync(user);
+
+                if(user.UserState == UserState.Disabled)
+                {
+                    var lockoutEndDate = new DateTime(2999, 01, 01);
+                    await userManager.SetLockoutEnabledAsync(user, true);
+                    await userManager.SetLockoutEndDateAsync(user, lockoutEndDate);
+                }
+                else
+                {
+                    await userManager.SetLockoutEnabledAsync(user, false);
+                }
 
                 // On succesful login redirect to home page
                 if (result.Succeeded)
@@ -154,6 +183,19 @@ namespace CBA.WebApi.Controllers
                 }
             }
             return View(model);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> DetailUser(string id)
+        {
+            var user = await userManager.FindByIdAsync(id);
+            DetailsUserViewModel detailsUserViewModel = new()
+            {
+                User = await userManager.FindByIdAsync(id),
+                PageTitle = "Details View",
+                Roles = (List<string>)await userManager.GetRolesAsync(user),
+            };
+            return View(detailsUserViewModel);
         }
 
 
@@ -230,22 +272,35 @@ namespace CBA.WebApi.Controllers
                 // object is then passed to the view for display
                 if (await userManager.IsInRoleAsync(user, role.Name) && role.State == State.Enabled)
                 {
+
                     model.Users.Add(user.UserName);
                 }
-                else
-                {
-                    continue;
-                }
+                
                
             }
 
             return View(model);
         }
+        [HttpGet]
+        public async Task<IActionResult> EditDetail(string id)
+        {
+            var role = await roleManager.FindByIdAsync(id);
+            EditDetailRoleViewModel editDetailRoleViewModel = new()
+            {
+                RoleName = role.Name,
+                State = role.State,
+                Users = (List<Claim>)await roleManager.GetClaimsAsync(role),
+
+            };
+
+            return View(editDetailRoleViewModel);
+        }
+
         [HttpPost]
         public async Task<IActionResult> EditRole(EditRoleViewModel model)
         {
             var role = await roleManager.FindByIdAsync(model.Id);
-            //var user = await userManager.FindByIdAsync(model.Id);
+            List<ApplicationUser> users = (List<ApplicationUser>)userManager.Users;
 
             if (role == null)
             {
@@ -256,13 +311,16 @@ namespace CBA.WebApi.Controllers
             {
                 role.Name = model.RoleName;
                 role.State = model.State;
-
+                //foreach(var user in users)
+                //{
+                //    if(role.State == State.Disabled)
+                //    {
+                //        await userManager.RemoveFromRoleAsync(user, role.Name);
+                //    }
+                //}
 
                 //Update role in database
-                var result = await roleManager.UpdateAsync(role);
-                    //var lockoutEndDate = new DateTime(2999, 01, 01);
-                    //await userManager.SetLockoutEnabledAsync(user, true);
-                    //await userManager.SetLockoutEndDateAsync(user, lockoutEndDate);
+                var result = await roleManager.UpdateAsync(role);                
 
                 if (result.Succeeded)
                 {

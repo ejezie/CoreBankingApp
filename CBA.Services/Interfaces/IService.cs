@@ -1,10 +1,13 @@
 ﻿using System;
+using System.Threading.Tasks;
+using CBA.Core.Models;
+
 namespace CBA.Services.Interfaces
 {
     public interface IService
     {
         string GeneratePassword();
         string GenerateUserName(string firstname, string secondname);
-        object SendEmail(object sender, EventArgs e);
+        Task SendEmailAsync(MailRequest mailRequest);
     }
 }

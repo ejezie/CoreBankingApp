@@ -1,7 +1,6 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 using CBA.Core.Enums;
-using CBA.CORE.Enums;
 using Microsoft.AspNetCore.Identity;
 
 namespace CBA.Core.Models
@@ -16,6 +15,9 @@ namespace CBA.Core.Models
         public string LastName { get; set; }
         [Required]
         public Gender Gender { get; set; }
+
+        [Display(Name = "Enable/Disable User")]
+        public UserState UserState { get; set; } = UserState.Enabled;
 
         //public UserState IsEnable { get; set; } = UserState.isEnabled;
 

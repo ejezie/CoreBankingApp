@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CBA.DATA.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20220513101839_IsEnabledTable")]
-    partial class IsEnabledTable
+    [Migration("20220513114029_addStatusTable")]
+    partial class addStatusTable
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -77,9 +77,6 @@ namespace CBA.DATA.Migrations
                     b.Property<int>("Gender")
                         .HasColumnType("int");
 
-                    b.Property<bool>("IsEnable")
-                        .HasColumnType("bit");
-
                     b.Property<string>("LastName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -116,6 +113,9 @@ namespace CBA.DATA.Migrations
                     b.Property<string>("UserName")
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
+
+                    b.Property<int>("UserState")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
