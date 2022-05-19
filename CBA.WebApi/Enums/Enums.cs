@@ -31,12 +31,6 @@ namespace CBA.CORE.Enums
             Inbetween = 2,
             Closed = 3
         }
-        public enum AccountTypeEnum
-        {
-            SAVINGS = 1,
-            CURRENT = 2,
-            LOAN = 3
-        }
         public enum Status
         {
             INACTIVE = 0,
@@ -52,6 +46,20 @@ namespace CBA.CORE.Enums
         {
             MALE = 1,
             FEMALE = 2
+        }
+        public enum AccountStatus
+        {
+            Closed, Open
+        }
+
+        public enum TermsOfLoan
+        {
+            Fixed, Reducing
+        }
+
+        public enum AccountType
+        {
+            Savings, Current, Loan
         }
     }
 }

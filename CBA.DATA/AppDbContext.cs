@@ -23,10 +23,19 @@ namespace CBA.Data
             modelBuilder.Entity<Customer>().HasData(
                    new Customer
                    {
-                       Id = 1,
-                       FirstName = "James",
-                       LastName = "Bond",
-                       Gender = Core.Enums.Gender.any,
+                     //FullName = "James Bond",
+                     //Address = "Bermuda Triangle",
+                     //ConsumerInfo = "smart",
+                     //ID = 1,
+                     //CustomerLongID = "64545566"
+                     //Email = "Jamesbond007@gmail.com",
+                     //Gender = Core.Enums.Gender.Male,
+                     //PhoneNumber = "007007007007",
+                     FirstName = "James Bond",
+                     LastName = "King",
+                     Gender = Core.Enums.Gender.Male,
+                     Id = 1,
+                     
                    }
             );
         }

@@ -71,7 +71,7 @@ namespace CBA.WebApi.Controllers
                 var hashed = passHasher.HashPassword(user, password);
                 user.PasswordHash = hashed;
 
-                var result = await userManager.CreateAsync(user, hashed);
+                var result = await userManager.CreateAsync(user, password);
 
                 var mail = new MailRequest
                 {
@@ -151,7 +151,7 @@ namespace CBA.WebApi.Controllers
             var hashed = passHasher.HashPassword(user, password);
 
             await userManager.RemovePasswordAsync(user);
-            var result = await userManager.AddPasswordAsync(user, hashed);
+            var result = await userManager.AddPasswordAsync(user, password);
 
             var mail = new MailRequest
             {
