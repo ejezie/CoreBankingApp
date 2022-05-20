@@ -16,6 +16,7 @@
     <None Remove="MailKit" />
     <None Remove="MimeKit" />
     <None Remove="Microsoft.AspNetCore.Http" />
+    <None Remove="Microsoft.EntityFrameworkCore.Relational" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Interfaces\" />

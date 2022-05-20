@@ -1,22 +1,23 @@
-﻿//using System;
-//using CBA.CORE.Models;
-//using CBA.Data;
-//using CBA.DATA.Interfaces;
+﻿using System;
+using System.Linq;
+using CBA.CORE.Models;
+using CBA.Data;
+using CBA.DATA.Interfaces;
 
-//namespace CBA.DATA.Implementations
-//{
-//    public class AccountTypeManagementDao : IAccountTypeManagementDao
-//    {
-//        private readonly AppDbContext context;
+namespace CBA.DATA.Implementations
+{
+    public class AccountTypeManagementDao : IAccountTypeManagementDao
+    {
+        private readonly AppDbContext context;
 
-//        public AccountTypeManagementDao(AppDbContext context)
-//        {
-//            this.context = context;
-//        }
+        public AccountTypeManagementDao(AppDbContext context)
+        {
+            this.context = context;
+        }
 
-//        public AccountTypeManagement GetFirst()
-//        {
-//            return context.AccountTypeManagements.First();
-//        }
-//    }
-//}
+        public AccountTypeManagement GetFirst()
+        {
+            return context.AccountTypeManagements.First();
+        }
+    }
+}

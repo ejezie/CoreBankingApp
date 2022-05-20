@@ -9,6 +9,8 @@ using CBA.Data;
 using CBA.Data.Implementations;
 using CBA.Data.Interfaces;
 using CBA.DATA;
+using CBA.DATA.Implementations;
+using CBA.DATA.Interfaces;
 using CBA.Services.Implementations;
 using CBA.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
@@ -55,6 +57,9 @@ namespace CBA.WebApi
             services.AddTransient<AppUserSeedData>();
             services.AddTransient<IService, Service>();
             services.AddTransient<ICustomerDao, CustomerDao>();
+            services.AddTransient<ICustomerAccountDao, CustomerAccountDao>();
+            services.AddTransient<IGLAccountDao, GLAccountDao>();
+
             services.Configure<MailSettings>(Configuration.GetSection("MailSettings"));
 
         }

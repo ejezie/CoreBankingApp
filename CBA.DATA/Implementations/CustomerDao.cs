@@ -16,54 +16,66 @@ namespace CBA.Data.Implementations
             this.context = context;
         }
 
-        public Customer Delete(long id)
+        public IEnumerable<Customer> GetAll()
         {
-            Customer customer = context.Customers.Find(id);
-            if (customer != null)
-            {
-                context.Customers.Remove(customer);
-                context.SaveChanges();
-            }
-            return customer;
+            return context.Customers.ToList();
         }
 
-        public Customer RetrieveById(int id)
+        public Customer GetById(int id)
         {
-            Customer customer = context.Customers.Find(id);
-            return customer;
+            Customer result = context.Customers.SingleOrDefault(c => c.ID.Equals(id));
+            return result;
         }
 
-        public Customer Save(Customer customer)
-        {
-            context.Customers.Add(customer);
-            context.SaveChanges();
-            return customer;
-        }
 
-        public Customer GetRoles(Customer customer)
-        {
-            throw new NotImplementedException();
-        }
+        //public Customer Delete(long id)
+        //{
+        //    Customer customer = context.Customers.Find(id);
+        //    if (customer != null)
+        //    {
+        //        context.Customers.Remove(customer);
+        //        context.SaveChanges();
+        //    }
+        //    return customer;
+        //}
 
-        public Customer UpdateCustomer(Customer customerChanges)
-        {
-            var customer = context.Customers.Attach(customerChanges);
-            customer.State = Microsoft.EntityFrameworkCore.EntityState.Modified;
-            context.SaveChanges();
-            return customerChanges;
-        }
+        //public Customer RetrieveById(int id)
+        //{
+        //    Customer customer = context.Customers.Find(id);
+        //    return customer;
+        //}
 
-        public Customer CheckStatus()
-        {
-            throw new NotImplementedException();
-           
-        }
+        //public Customer Save(Customer customer)
+        //{
+        //    context.Customers.Add(customer);
+        //    context.SaveChanges();
+        //    return customer;
+        //}
 
-        public IEnumerable<Customer> GetAllCustomers()
-        {
-            var customers = context.Customers.ToList();
-            return customers;
-        }
+        //public Customer GetRoles(Customer customer)
+        //{
+        //    throw new NotImplementedException();
+        //}
+
+        //public Customer UpdateCustomer(Customer customerChanges)
+        //{
+        //    var customer = context.Customers.Attach(customerChanges);
+        //    customer.State = Microsoft.EntityFrameworkCore.EntityState.Modified;
+        //    context.SaveChanges();
+        //    return customerChanges;
+        //}
+
+        //public Customer CheckStatus()
+        //{
+        //    throw new NotImplementedException();
+
+        //}
+
+        //public IEnumerable<Customer> GetAllCustomers()
+        //{
+        //    var customers = context.Customers.ToList();
+        //    return customers;
+        //}
     }
 }
 

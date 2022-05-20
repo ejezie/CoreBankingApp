@@ -59,13 +59,13 @@ namespace CBA.CORE.Models
 
         [Display(Name = "Select the Savings Interest Expense GL")]
         public int? SavingsInterestExpenseGlID { get; set; }
-        public virtual GlAccount SavingsInterestExpenseGl { get; set; }
+        public virtual GLAccount SavingsInterestExpenseGl { get; set; }
 
 
 
         [Display(Name = "Select Interest Payable GL for Savings")]
         public int? SavingsInterestPayableGlID { get; set; }
-        public virtual GlAccount SavingsInterestPayableGl { get; set; }
+        public virtual GLAccount SavingsInterestPayableGl { get; set; }
 
 
 
@@ -80,12 +80,12 @@ namespace CBA.CORE.Models
 
         [Display(Name = "Choose the Interest Income GL")]
         public int? LoanInterestIncomeGlID { get; set; }
-        public virtual GlAccount LoanInterestIncomeGl { get; set; }
+        public virtual GLAccount LoanInterestIncomeGl { get; set; }
 
 
         [Display(Name = "Choose the Interest Receivable GL")]
         public int? LoanInterestReceivableGlID { get; set; }
-        public virtual GlAccount LoanInterestReceivableGl { get; set; }
+        public virtual GLAccount LoanInterestReceivableGl { get; set; }
 
 
         [Display(Name = "Business Status")]

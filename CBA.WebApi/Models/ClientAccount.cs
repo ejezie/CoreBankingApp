@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
+using CBA.Core.Models;
 using static CBA.CORE.Enums.Enums;
 
 namespace CBA.CORE.Models
@@ -43,7 +44,7 @@ namespace CBA.CORE.Models
 
 
         public int ConsumerID { get; set; }
-        public virtual Consumer Consumer { get; set; }
+        public virtual Customer Customer { get; set; }
 
 
 

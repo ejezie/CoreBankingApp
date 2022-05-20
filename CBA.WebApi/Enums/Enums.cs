@@ -61,5 +61,29 @@ namespace CBA.CORE.Enums
         {
             Savings, Current, Loan
         }
+
+        public enum MainGLCategory
+        {
+            Asset, Liability, Capital, Expense, Income
+        }
+        public enum TellerPostingType
+        {
+            Deposit, Withdrawal
+        }
+
+        public enum PostStatus
+        {
+            Approved, Pending, Declined
+        }
+
+        public enum TransactionType
+        {
+            Debit, Credit
+        }
+
+        public enum PandLType
+        {
+            Income, Expenses
+        }
     }
 }

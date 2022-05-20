@@ -7,13 +7,13 @@ namespace CBA.Data.Interfaces
 {
     public interface ICustomerDao
     {
-        Customer Save(Customer item);
-        Customer RetrieveById(int id);
-        Customer Delete(long id);
-        Customer UpdateCustomer(Customer userChanges);
-        IEnumerable<Customer> GetAllCustomers();
-        Customer GetRoles(Customer user);
-        Customer CheckStatus();
+        //Customer Save(Customer item);
+        Customer GetById(int id);
+        //Customer Delete(long id);
+        //Customer UpdateCustomer(Customer userChanges);
+        IEnumerable<Customer> GetAll();
+        //Customer GetRoles(Customer user);
+        //Customer CheckStatus();
     }
 }
 

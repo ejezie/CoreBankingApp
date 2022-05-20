@@ -17,6 +17,7 @@
     <None Remove="MailKit" />
     <None Remove="MimeKit" />
     <None Remove="Microsoft.AspNetCore.Http" />
+    <None Remove="Microsoft.EntityFrameworkCore.Relational" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Enums\" />
@@ -36,5 +37,6 @@
     <PackageReference Include="MailKit" Version="3.2.0" />
     <PackageReference Include="MimeKit" Version="3.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.Http" Version="2.2.2" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="5.0.0" />
   </ItemGroup>
 </Project>

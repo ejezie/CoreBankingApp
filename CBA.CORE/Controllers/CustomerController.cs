@@ -24,7 +24,7 @@ namespace CBA.WebApi.Controllers
 
         public IActionResult Index()
         {
-            var customers = _customerdaoimplement.GetAllCustomers();
+            var customers = _customerdaoimplement.GetAll();
             return View(customers);
         }
 
@@ -34,69 +34,70 @@ namespace CBA.WebApi.Controllers
             return View();
         }
 
-        [HttpPost]
-        public IActionResult Add(AddCustomerViewModel model)
-        {
-            if (ModelState.IsValid)
-            {
-                Customer newCustomer = new()
-                {
-                    FirstName = model.FirstName,
-                    LastName = model.LastName,
-                    Gender = model.Gender,
-                };
+        //[HttpPost]
+        //public IActionResult Add(AddCustomerViewModel model)
+        //{
+        //    if (ModelState.IsValid)
+        //    {
+        //        Customer newCustomer = new()
+        //        {
 
-                _customerdaoimplement.Save(newCustomer);
-                //return RedirectToAction("index", new { id = newUser.Id });
-                return RedirectToAction("index", "home", new { area = "" });
-            }
-           
-            return View(model);
-        }
+        //           FullName= model.FirstName,
+        //            Email = model.LastName,
+        //            Gender = model.Gender,
+        //        };
 
-        public IActionResult Detail(int id)
-        {
-            DetailsCustomerViewModel detailsUserViewModel = new DetailsCustomerViewModel()
-            {
-                customer = _customerdaoimplement.RetrieveById(id),
-                pageTitle = "Customer Details"
-            };
+        //        _customerdaoimplement.Save(newCustomer);
+        //        return RedirectToAction("index", new { id = newUser.Id });
+        //        return RedirectToAction("index", "home", new { area = "" });
+        //    }
 
-            return View(detailsUserViewModel);
-        }
+        //    return View(model);
+        //}
 
-        [HttpGet]
-        public IActionResult Edit(int id)
-        {
-            var customer = _customerdaoimplement.RetrieveById(id);
-            EditCustomerViewModel editUserViewModel = new EditCustomerViewModel()
-            {
-                FirstName = customer.FirstName,
-                LastName = customer.LastName,
-                Gender = customer.Gender
-            };
-            return View(editUserViewModel);
-        }
+        //public IActionResult Detail(int id)
+        //{
+        //    DetailsCustomerViewModel detailsUserViewModel = new DetailsCustomerViewModel()
+        //    {
+        //        customer = _customerdaoimplement.GetById(id),
+        //        pageTitle = "Customer Details"
+        //    };
 
-        [HttpPost]
-        public IActionResult Edit(EditCustomerViewModel model)
-        {
-            if (ModelState.IsValid)
-            {
-                Customer customer = _customerdaoimplement.RetrieveById(model.Id);
-                //Console.WriteLine(model.Id);
+        //    return View(detailsUserViewModel);
+        //}
 
-                customer.FirstName = model.FirstName;
-                customer.LastName = model.LastName;
-                customer.Gender = model.Gender;
+        //[HttpGet]
+        //public IActionResult Edit(int id)
+        //{
+        //    var customer = _customerdaoimplement.GetById(id);
+        //    EditCustomerViewModel editUserViewModel = new EditCustomerViewModel()
+        //    {
+        //        FirstName = customer.FirstName,
+        //        LastName = customer.LastName,
+        //        Gender = customer.Gender
+        //    };
+        //    return View(editUserViewModel);
+        //}
+
+        //[HttpPost]
+        //public IActionResult Edit(EditCustomerViewModel model)
+        //{
+        //    if (ModelState.IsValid)
+        //    {
+        //        Customer customer = _customerdaoimplement.GetById(model.Id);
+        //        //Console.WriteLine(model.Id);
+
+        //        customer.FirstName = model.FirstName;
+        //        customer.LastName = model.LastName;
+        //        customer.Gender = model.Gender;
                
 
-                Customer updatedCustomer = _customerdaoimplement.UpdateCustomer(customer);
+        //        Customer updatedCustomer = _customerdaoimplement.UpdateCustomer(customer);
 
-                return RedirectToAction("index", "home", new { area = "" });
-            }
+        //        return RedirectToAction("index", "home", new { area = "" });
+        //    }
 
-            return View(model);
-        }
+        //    return View(model);
+        //}
     }
 }
