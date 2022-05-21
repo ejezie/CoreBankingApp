@@ -20,11 +20,10 @@ namespace CBA.WebApi.Controllers
             _customerdaoimplement = implement;
         }
 
-        // GET: /<controller>/
-        //public IActionResult Index()
-        //{
-        //   var customers = _customerdaoimplement.GetAllCustomers();
-        //    return View(customers);
-        //}
+        public IActionResult Index()
+        {
+            var customers = _customerdaoimplement.GetAll();
+            return View(customers);
+        }
     }
 }

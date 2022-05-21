@@ -1,4 +1,4 @@
-﻿@*@model IEnumerable<Customer>
+﻿@model IEnumerable<Customer>
 @{
     ViewBag.title = "Users List";
 }
@@ -20,8 +20,8 @@
             <thead>
                 <tr>
                     <th>Id</th>
-                    <th>First Name</th>
-                    <th>Last Name</th>
+                    <th>Full Name</th>
+                    <th>Email</th>
                     <th>Gender</th>
                 </tr>
             </thead>
@@ -29,9 +29,9 @@
                 @foreach (var item in Model)
                 {
                     <tr>
-                        <td width="30%">@item.Id</td>
-                        <td width="30%">@item.FirstName</td>
-                        <td width="30%">@item.LastName</td>
+                        <td width="30%">@item.ID</td>
+                        <td width="30%">@item.FullName</td>
+                        <td width="30%">@item.Email</td>
                         <td width="30%">@item.Gender</td>
                     </tr>
                 }
@@ -42,4 +42,4 @@
     {
         <p> No Items have been recorded </p>
     }
-</div>*@
+</div>

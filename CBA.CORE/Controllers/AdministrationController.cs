@@ -72,12 +72,15 @@ namespace CBA.WebApi.Controllers
                 user.PasswordHash = hashed;
 
                 var result = await userManager.CreateAsync(user, password);
+                var bodyFormat = "<p>Email From: {0} ({1})</p><p>Message:</p><p>{2}</p> <h2>Thanks and have a nice day</h2>";
+
 
                 var mail = new MailRequest
                 {
                     ToEmail = model.Email,
                     Subject = model.LastName,
-                    Body = password,
+                    Body =  string.Format(bodyFormat, "put your name", model.Email, "Dear " + model.FirstName + " " + model.LastName + ", an account has been created for you in this Core Banking App (Darryl'sCBA). Your username is \"" + model.Username + "\" and your password is: \"" + password + "\". Please keep safely these details as they will be required of you to access the application"),
+
                 };
 
                 // On succesful login redirect to home page

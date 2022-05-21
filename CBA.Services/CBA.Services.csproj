@@ -32,5 +32,6 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\CBA.WebApi\CBA.CORE.csproj" />
+    <ProjectReference Include="..\CBA.DATA\CBA.DATA.csproj" />
   </ItemGroup>
 </Project>

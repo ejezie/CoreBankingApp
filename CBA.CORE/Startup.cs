@@ -59,6 +59,9 @@ namespace CBA.WebApi
             services.AddTransient<ICustomerDao, CustomerDao>();
             services.AddTransient<ICustomerAccountDao, CustomerAccountDao>();
             services.AddTransient<IGLAccountDao, GLAccountDao>();
+            services.AddTransient<IGLCategoryDao, GLCategoryDao>();
+            services.AddTransient<IAccountTypeManagementDao, AccountTypeManagementDao>();
+
 
             services.Configure<MailSettings>(Configuration.GetSection("MailSettings"));
 
