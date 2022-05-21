@@ -3,15 +3,16 @@ using CBA.Core.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using CBA.CORE.Models;
+using System.Linq;
 //using CBA.DATA;
 
 namespace CBA.Data
 {
-    public class AppDbContext : IdentityDbContext<ApplicationUser, ApplicationRole,string>
+    public class AppDbContext : IdentityDbContext<ApplicationUser, ApplicationRole, string>
     {
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
         {
-            
+
         }
         public DbSet<Customer> Customers { get; set; }
         public DbSet<AccountTypeManagement> AccountTypeManagements { get; set; }
@@ -49,7 +50,20 @@ namespace CBA.Data
                        PhoneNumber = "007007007007",
                    }
             );
-        }
 
+
+            foreach (var entityType in modelBuilder.Model.GetEntityTypes())
+            {
+                var properties = entityType.ClrType.GetProperties().Where(p => p.PropertyType == typeof(decimal));
+
+
+                foreach (var property in properties)
+                {
+                    modelBuilder.Entity(entityType.Name).Property(property.Name).HasColumnType("decimal(18,2)");
+                }
+                //}
+            }
+
+        }
     }
 }

@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CBA.DATA.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20220520144611_MyModelsNew")]
-    partial class MyModelsNew
+    [Migration("20220521055905_Models")]
+    partial class Models
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -376,18 +376,9 @@ namespace CBA.DATA.Migrations
                     b.Property<long>("Code")
                         .HasColumnType("bigint");
 
-                    b.Property<DateTime>("DateCreated")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("DateModified")
-                        .HasColumnType("datetime2");
-
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<long>("Id")
-                        .HasColumnType("bigint");
 
                     b.Property<int>("MainGLCategory")
                         .HasColumnType("int");

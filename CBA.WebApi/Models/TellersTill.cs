@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
 using CBA.Core.Models;
 
 namespace CBA.CORE.Models

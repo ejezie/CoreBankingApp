@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
 using static CBA.CORE.Enums.Enums;
 
 namespace CBA.CORE.Models

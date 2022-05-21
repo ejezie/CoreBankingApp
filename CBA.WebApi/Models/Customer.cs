@@ -28,7 +28,6 @@ namespace CBA.Core.Models
         public string Email { get; set; }
 
 
-
         [Required]
         [RegularExpression(@"^[0-9+]+$", ErrorMessage = "Please enter a valid phone number"), MinLength(11),
          MaxLength(16)]

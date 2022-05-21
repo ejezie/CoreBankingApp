@@ -5,6 +5,7 @@ namespace CBA.CORE.Models
 {
     public class AccountTypeManagement
     {
+        [Key]
         public int ID { get; set; }
 
 

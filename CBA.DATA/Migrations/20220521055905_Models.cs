@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace CBA.DATA.Migrations
 {
-    public partial class MyModelsNew : Migration
+    public partial class Models : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -116,10 +116,7 @@ namespace CBA.DATA.Migrations
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Code = table.Column<long>(type: "bigint", nullable: false),
                     MainGLCategory = table.Column<int>(type: "int", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Id = table.Column<long>(type: "bigint", nullable: false),
-                    DateCreated = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    DateModified = table.Column<DateTime>(type: "datetime2", nullable: false)
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {

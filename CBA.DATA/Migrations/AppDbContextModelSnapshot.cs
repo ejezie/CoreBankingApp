@@ -374,18 +374,9 @@ namespace CBA.DATA.Migrations
                     b.Property<long>("Code")
                         .HasColumnType("bigint");
 
-                    b.Property<DateTime>("DateCreated")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("DateModified")
-                        .HasColumnType("datetime2");
-
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<long>("Id")
-                        .HasColumnType("bigint");
 
                     b.Property<int>("MainGLCategory")
                         .HasColumnType("int");

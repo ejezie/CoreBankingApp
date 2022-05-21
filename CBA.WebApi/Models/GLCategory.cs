@@ -5,9 +5,8 @@ using static CBA.CORE.Enums.Enums;
 
 namespace CBA.CORE.Models
 {
-    public class GLCategory : BaseEntity
+    public class GLCategory
     {
-        [Key]
         public int ID { get; set; }
 
         [Required(ErrorMessage = "Input GL Category Name")]
