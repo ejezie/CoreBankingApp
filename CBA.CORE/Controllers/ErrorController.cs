@@ -30,5 +30,15 @@ namespace CBA.WebApi.Controllers
 
             return View("NotFound");
         }
+        public IActionResult ErrorView(int statusCode)
+        {
+
+
+            ViewBag.ErrorMessage = "Sorry, the resource could not be found";
+        
+
+
+            return View("NotFound");
+        }
     }
 }

@@ -28,7 +28,8 @@ namespace CBA.DATA
                  "manager",
                  "auditor",
                  "developer",
-                 "user"
+                 "user",
+                 "teller",
             };
 
             foreach (string role in roles)

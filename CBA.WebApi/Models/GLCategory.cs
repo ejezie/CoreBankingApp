@@ -2,6 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using CBA.Core.Utility;
 using static CBA.CORE.Enums.Enums;
+//using static CBA.CORE.Enums.Enums;
 
 namespace CBA.CORE.Models
 {

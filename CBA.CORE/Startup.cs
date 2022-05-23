@@ -25,6 +25,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+
 //using CBA.Data;
 
 
@@ -61,6 +62,8 @@ namespace CBA.WebApi
             services.AddTransient<IGLAccountDao, GLAccountDao>();
             services.AddTransient<IGLCategoryDao, GLCategoryDao>();
             services.AddTransient<IAccountTypeManagementDao, AccountTypeManagementDao>();
+            services.AddTransient<ITellerDao, TellerDao>();
+            services.AddTransient<IBalanceSheetDao, BalanceSheetDao>();
 
 
             services.Configure<MailSettings>(Configuration.GetSection("MailSettings"));

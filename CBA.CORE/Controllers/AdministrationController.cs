@@ -328,7 +328,7 @@ namespace CBA.WebApi.Controllers
         public async Task<IActionResult> EditRole(EditRoleViewModel model)
         {
             var role = await roleManager.FindByIdAsync(model.Id);
-            List<ApplicationUser> users = (List<ApplicationUser>)userManager.Users;
+            //List<ApplicationUser> users = (List<ApplicationUser>)userManager.Users;
 
             if (role == null)
             {

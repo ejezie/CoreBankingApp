@@ -31,9 +31,11 @@ namespace CBA.Services.Implementations
         private readonly ICustomerDao customerDao;
         private readonly IGLAccountDao gLAccountDao;
         private readonly IGLCategoryDao gLCategoryDao;
+        private readonly IBalanceSheetDao balanceSheetDao;
         private readonly IAccountTypeManagementDao accountTypeManagementDao;
+        DateTime yesterday;
 
-        public Service(IOptions<MailSettings> mailSettings, AppDbContext context, ICustomerDao _customerDao, IAccountTypeManagementDao _accountTypeManagementDao, IGLAccountDao _gLAccountDao, IGLCategoryDao _gLCategoryDao, UserManager<ApplicationUser> _userManager, RoleManager<ApplicationRole> _roleManager)
+        public Service(IOptions<MailSettings> mailSettings, AppDbContext context, ICustomerDao _customerDao, IAccountTypeManagementDao _accountTypeManagementDao, IGLAccountDao _gLAccountDao, IGLCategoryDao _gLCategoryDao, UserManager<ApplicationUser> _userManager, RoleManager<ApplicationRole> _roleManager, IBalanceSheetDao _balanceSheetDao)
         {
             this.context = context;
             userManager = _userManager;
@@ -43,6 +45,9 @@ namespace CBA.Services.Implementations
             accountTypeManagementDao = _accountTypeManagementDao;
             gLAccountDao = _gLAccountDao;
             gLCategoryDao = _gLCategoryDao;
+            balanceSheetDao = _balanceSheetDao;
+            //yesterday = context.AccountTypeManagements.First().FinancialDate.AddDays(-1);
+
         }
 
         public bool CheckIfAccountBalanceIsEnough(CustomerAccount account, decimal amountToDebit)
@@ -408,6 +413,11 @@ namespace CBA.Services.Implementations
             return possibleUsername;
         }
 
+        public List<ExpenseIncomeEntry> GetAllExpenseIncomeEntries()
+        {
+            return context.ExpenseIncomeEntries.ToList();
+        }
+
         public async Task<List<ApplicationUser>> GetAllTellers()
         {
             var users = userManager.Users;
@@ -424,6 +434,72 @@ namespace CBA.Services.Implementations
             }
 
             return (tellers);
+        }
+
+        public List<GLAccount> GetAssetAccounts()
+        {
+            return balanceSheetDao.GetAssetAccounts();
+        }
+
+        public List<GLAccount> GetCapitalAccounts()
+        {
+            return balanceSheetDao.GetCapitalAccounts();
+        }
+
+        public List<ExpenseIncomeEntry> GetEntries()
+        {
+            var result = new List<ExpenseIncomeEntry>();
+            var allEntries = GetAllExpenseIncomeEntries();
+            foreach (var item in allEntries)
+            {
+                if (item.Date.Date == yesterday.Date)
+                {
+                    result.Add(item);
+                }
+            }
+            return result;
+        }
+
+        public List<ExpenseIncomeEntry> GetEntriesDate(DateTime startDate, DateTime endDate)
+        {
+            var result = new List<ExpenseIncomeEntry>();
+            if (startDate < endDate)
+            {
+                //gets all entries(with their balances) for the start and the end dates. eg: Current exp gl (bal: 3k) on Jan5, (bal 8k) on Jan 9. etc. A GL cant exist more than 2 times (for start and end dates).
+                var allEntries = GetAllExpenseIncomeEntries();
+                foreach (var item in allEntries)
+                {
+                    if (item.Date.Date == startDate || item.Date.Date == endDate)
+                    {
+                        result.Add(item);
+                    }
+                }
+
+            }
+            return result.OrderByDescending(e => e.Date).ToList();  //making entries on endDate to come before those of startDate so that the difference in Account balance between the two days could be easily calculated
+        }
+
+        public List<LiabilityViewModel> GetLiabilityAccounts()
+        {
+            return balanceSheetDao.GetLiabilityAccounts();
+        }
+
+        public List<Transaction> GetTrialBalanceTransactions(DateTime startDate, DateTime endDate)
+        {
+            var result = new List<Transaction>();
+            if (startDate < endDate)
+            {
+                var allTransactions = context.Transactions.ToList();
+                foreach (var item in allTransactions)
+                {
+                    if (item.Date.Date >= startDate && item.Date.Date <= endDate)
+                    {
+                        result.Add(item);
+                    }
+                }
+
+            }
+            return result;
         }
 
         public bool IsConfigurationSet()
@@ -460,6 +536,89 @@ namespace CBA.Services.Implementations
             {
                 return false;
             }
+        }
+
+        public string PostTeller(CustomerAccount account, GLAccount till, decimal amt, TellerPostingType pType)
+        {
+            string output = "";
+            switch (pType)
+            {
+                case TellerPostingType.Deposit:
+                    CreditCustomerAccount(account, amt);
+                    DebitGl(till, amt);
+
+                    output = "success";
+                    break;
+                //break;
+                case TellerPostingType.Withdrawal:
+                    //Transfer the money from the user's till and reflect the changes in the customer account balance
+                    //check withdrawal limit
+
+                    var config = accountTypeManagementDao.GetFirst();
+                    //till = user.TillAccount;
+                    if (account.AccountType == AccountType.Savings)
+                    {
+                        if (account.AccountBalance >= config.SavingsMinimumBalance + amt)
+                        {
+                            if (till.AccountBalance >= amt)
+                            {
+                                CreditGl(till, amt);
+                                DebitCustomerAccount(account, amt);
+
+                                output = "success";
+                                account.SavingsWithdrawalCount++;
+                            }
+                            else
+                            {
+                                output = "Insufficient fund in the Till account";
+                            }
+                        }
+                        else
+                        {
+                            output = "insufficient Balance in Customer's account, cannot withdraw!";
+                        }
+
+                    }//end if savings
+
+
+                    else if (account.AccountType == AccountType.Current)
+                    {
+                        if (account.AccountBalance >= config.CurrentMinimumBalance + amt)
+                        {
+
+                            if (till.AccountBalance >= amt)
+                            {
+                                CreditGl(till, amt);
+                                DebitCustomerAccount(account, amt);
+
+                                output = "success";
+                                //decimal x = (amt + account.CurrentLien) / 1000;
+                                decimal x = (amt) / 1000;
+                                decimal charge = (int)x * config.COT;
+                                account.dailyInterestAccrued += charge;
+                                //account.CurrentLien = (x - (int)x) * 1000;
+                            }
+                            else
+                            {
+                                output = "Insufficient fund in the Till account";
+                            }
+                        }
+                        else
+                        {
+                            output = "insufficient Balance in Customer's account, cannot withdraw!";
+                        }
+
+                    }
+                    else //for loan
+                    {
+                        output = "Please select a valid account";
+                    }
+                    break;
+                //break;
+                default:
+                    break;
+            }//end switch
+            return output;
         }
 
         public async Task SendEmailAsync(MailRequest mailRequest)

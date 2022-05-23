@@ -21,6 +21,8 @@
     <PackageReference Include="MailKit" Version="3.2.0" />
     <PackageReference Include="MimeKit" Version="3.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.Http" Version="2.2.2" />
+    <PackageReference Include="Microsoft.AspNet.Mvc" Version="5.0.0" />
+    <PackageReference Include="Microsoft.NETCore.App" Version="2.2.8" />
   </ItemGroup>
 
   <ItemGroup>
@@ -41,6 +43,10 @@
     <None Remove="MailKit" />
     <None Remove="MimeKit" />
     <None Remove="Microsoft.AspNetCore.Http" />
+    <None Remove="Microsoft.AspNet.Mvc" />
+    <None Remove="Views\GLCategories\" />
+    <None Remove="Views\GLAccount\" />
+    <None Remove="Views\Tellers\" />
   </ItemGroup>
 
   <ItemGroup>
@@ -61,6 +67,9 @@
     <Folder Include="Views\Home\" />
     <Folder Include="Views\Error\" />
     <Folder Include="Views\Account\" />
+    <Folder Include="Views\GLCategories\" />
+    <Folder Include="Views\GLAccount\" />
+    <Folder Include="Views\Tellers\" />
   </ItemGroup>
   <Target Name="DebugEnsureNodeEnv" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(SpaRoot)node_modules') ">
     <!-- Ensure Node.js is installed -->

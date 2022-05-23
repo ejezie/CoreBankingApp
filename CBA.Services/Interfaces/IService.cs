@@ -29,5 +29,13 @@ namespace CBA.Services.Interfaces
         bool IsUniqueGLAcategory(string glAccountName);
         long CreateGlCategoryCode(GLCategory glCategory);
         Task<List<ApplicationUser>> GetAllTellers();
+        string PostTeller(CustomerAccount account, GLAccount till, decimal amt, TellerPostingType pType);
+        List<Transaction> GetTrialBalanceTransactions(DateTime startDate, DateTime endDate);
+        List<GLAccount> GetAssetAccounts();
+        List<GLAccount> GetCapitalAccounts();
+        List<LiabilityViewModel> GetLiabilityAccounts();
+        List<ExpenseIncomeEntry> GetAllExpenseIncomeEntries();
+        List<ExpenseIncomeEntry> GetEntries();
+        List<ExpenseIncomeEntry> GetEntriesDate(DateTime startDate, DateTime endDate);
     }
 }

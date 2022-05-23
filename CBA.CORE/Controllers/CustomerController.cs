@@ -6,6 +6,10 @@ using CBA.Core.Models;
 using CBA.Core.Models.ViewModels;
 using CBA.Data;
 using CBA.Data.Interfaces;
+using CBA.Services.Interfaces;
+//using System.Web.Mvc;
+using Microsoft.EntityFrameworkCore;
+using System.Net;
 using Microsoft.AspNetCore.Mvc;
 
 // For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -15,89 +19,135 @@ namespace CBA.WebApi.Controllers
     public class CustomerController : Controller
     {
         // GET: /<controller>/
-        private readonly ICustomerDao _customerdaoimplement;
+        private readonly AppDbContext context;
+        private readonly IService service;
 
-        public CustomerController(ICustomerDao customerdaoimplement)
+        public CustomerController(IService _service, AppDbContext context)
         {
-            _customerdaoimplement = customerdaoimplement;
+            this.context = context;
+            service = _service;
         }
 
-        public IActionResult Index()
+        public async Task<ActionResult> Index()
         {
-            var customers = _customerdaoimplement.GetAll();
-            return View(customers);
+            return View(await context.Customers.ToListAsync());
         }
 
-        [HttpGet]
-        public IActionResult Add()
+        // GET: Consumers/Details/5
+        public async Task<ActionResult> Details(int? id)
+        {
+            if (id == null)
+            {
+                return RedirectToAction("index", "home");
+
+            }
+            Customer consumer = await context.Customers.FindAsync(id);
+            if (consumer == null)
+            {
+                return RedirectToAction("index", "home");
+
+            }
+            return View(consumer);
+        }
+
+        public ActionResult Create()
         {
             return View();
         }
 
-        //[HttpPost]
-        //public IActionResult Add(AddCustomerViewModel model)
-        //{
-        //    if (ModelState.IsValid)
-        //    {
-        //        Customer newCustomer = new()
-        //        {
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> Create( Customer customer)
+        {
+            if (ModelState.IsValid)
+            {
+                customer.CustomerLongID = service.GenerateCustomerLongId();
 
-        //           FullName= model.FirstName,
-        //            Email = model.LastName,
-        //            Gender = model.Gender,
-        //        };
+                if (customer.CustomerLongID != null && !String.IsNullOrWhiteSpace(customer.FullName))
+                {
+                    var customerInfo = (customer.FullName + " " + "(" + customer.CustomerLongID.ToString() + ")");
+                    customer.CustomerInfo = customerInfo;
+                }
 
-        //        _customerdaoimplement.Save(newCustomer);
-        //        return RedirectToAction("index", new { id = newUser.Id });
-        //        return RedirectToAction("index", "home", new { area = "" });
-        //    }
+                context.Customers.Add(customer);
+                await context.SaveChangesAsync();
+                return RedirectToAction("Index");
+            }
 
-        //    return View(model);
-        //}
+            return View(customer);
+        }
 
-        //public IActionResult Detail(int id)
-        //{
-        //    DetailsCustomerViewModel detailsUserViewModel = new DetailsCustomerViewModel()
-        //    {
-        //        customer = _customerdaoimplement.GetById(id),
-        //        pageTitle = "Customer Details"
-        //    };
+        // GET: Consumers/Edit/5
+        public async Task<ActionResult> Edit(int? id)
+        {
+            if (id == null)
+            {
+                return RedirectToAction("index", "home");
 
-        //    return View(detailsUserViewModel);
-        //}
+            }
+            Customer consumer = await context.Customers.FindAsync(id);
+            if (consumer == null)
+            {
+                return RedirectToAction("index", "home");
 
-        //[HttpGet]
-        //public IActionResult Edit(int id)
-        //{
-        //    var customer = _customerdaoimplement.GetById(id);
-        //    EditCustomerViewModel editUserViewModel = new EditCustomerViewModel()
-        //    {
-        //        FirstName = customer.FirstName,
-        //        LastName = customer.LastName,
-        //        Gender = customer.Gender
-        //    };
-        //    return View(editUserViewModel);
-        //}
+            }
+            return View(consumer);
+        }
 
-        //[HttpPost]
-        //public IActionResult Edit(EditCustomerViewModel model)
-        //{
-        //    if (ModelState.IsValid)
-        //    {
-        //        Customer customer = _customerdaoimplement.GetById(model.Id);
-        //        //Console.WriteLine(model.Id);
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> Edit( Customer consumer)
+        {
+            if (ModelState.IsValid)
+            {
 
-        //        customer.FirstName = model.FirstName;
-        //        customer.LastName = model.LastName;
-        //        customer.Gender = model.Gender;
-               
+                if (consumer.CustomerLongID != null && !String.IsNullOrWhiteSpace(consumer.FullName))
+                {
+                    var consumerInfo = (consumer.FullName + " " + "(" + consumer.CustomerLongID.ToString() + ")");
+                    consumer.CustomerInfo = consumerInfo;
+                }
+                context.Entry(consumer).State = EntityState.Modified;
+                await context.SaveChangesAsync();
+                return RedirectToAction("Index");
+            }
+            return View(consumer);
+        }
 
-        //        Customer updatedCustomer = _customerdaoimplement.UpdateCustomer(customer);
+        // GET: Consumers/Delete/5
+        public async Task<ActionResult> Delete(int? id)
+        {
+            if (id == null)
+            {
+                return RedirectToAction("index", "home");
 
-        //        return RedirectToAction("index", "home", new { area = "" });
-        //    }
+            }
+            Customer consumer = await context.Customers.FindAsync(id);
+            if (consumer == null)
+            {
+                return RedirectToAction("index", "home");
 
-        //    return View(model);
-        //}
+            }
+            return View(consumer);
+        }
+
+        // POST: Consumers/Delete/5
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> DeleteConfirmed(int id)
+        {
+            Customer consumer = await context.Customers.FindAsync(id);
+            context.Customers.Remove(consumer);
+            await context.SaveChangesAsync();
+            return RedirectToAction("Index");
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                context.Dispose();
+            }
+            base.Dispose(disposing);
+        }
     }
 }
