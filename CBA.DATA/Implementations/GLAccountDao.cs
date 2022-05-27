@@ -92,12 +92,12 @@ namespace CBA.DATA.Implementations
         public List<GLAccount> GetTillsWithoutTellers()
         {
             var output = new List<GLAccount>();
-            var allTills = GetAllTills();
+            List<GLAccount> allTills = GetAllTills();
             var tillAccount = context.TillAccounts.ToList();
 
             foreach (var till in allTills)
             {
-                if (tillAccount.Any(c => c.GlAccountID == till.ID))
+                if (!tillAccount.Any(c => c.GlAccountID == till.ID))
                 {
                     output.Add(till);
                 }

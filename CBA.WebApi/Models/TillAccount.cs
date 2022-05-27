@@ -15,6 +15,7 @@ namespace CBA.CORE.Models
 
         [Required(ErrorMessage = "The Till Account must be selected")]
         public int GlAccountID { get; set; }
+
         public virtual GLAccount GlAccount { get; set; }
     }
 }

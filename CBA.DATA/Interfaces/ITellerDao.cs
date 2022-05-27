@@ -12,5 +12,6 @@ namespace CBA.DATA.Interfaces
         Task<List<ApplicationUser>> GetTellersWithNoTills();
         Task<List<TillAccount>> GetAllTellerDetails();
         List<TillAccount> GetDbTillAccounts();
+        Task<List<ApplicationUser>> GetTellersWithTills();
     }
 }

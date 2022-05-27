@@ -7,7 +7,6 @@ using CBA.Data;
 using CBA.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-//using System.Web.Mvc;
 using System.Net;
 using CBA.DATA.Interfaces;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -30,13 +29,6 @@ namespace CBA.WebApi.Controllers
             gLAccountDao = _gLAccountDao;
         }
 
-        //[HttpGet]
-        //[AllowAnonymous]
-        //public IActionResult AccessDenied()
-        //{
-        //    return View();
-        //}
-        // GET: /<controller>/
         public async Task<ActionResult> Index()
         {
             var accountTypeManagements = context.AccountTypeManagements.Include(a => a.COTIncomeGl).Include(a => a.CurrentInterestExpenseGl).Include(a => a.LoanInterestIncomeGl).Include(a => a.LoanInterestReceivableGl).Include(a => a.SavingsInterestExpenseGl).Include(a => a.SavingsInterestPayableGl);

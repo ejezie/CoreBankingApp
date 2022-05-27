@@ -1,0 +1,72 @@
+﻿@model IEnumerable<CBA.CORE.Models.AccountTypeManagement>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h4>Account Configuration</h4>
+
+<p>
+    @*@Html.ActionLink("All Configuration settings", "Create")*@
+    <a asp-action="Create" asp-controller="AccountTypeManagements" class="btn btn-info" style="margin-right: 1rem">All Configuration settings</a>
+
+</p>
+<table class="table table-bordered table-striped">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.ID)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.IsOpened)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.CurrentCreditInterestRate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.LoanDebitInterestRate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.SavingsCreditInterestRate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.COT)
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.ID)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.IsOpened)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CurrentCreditInterestRate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.LoanDebitInterestRate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.SavingsCreditInterestRate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.COT)
+            </td>
+          
+        </tr>
+    }
+
+</table>
+<p>
+    @*@Html.ActionLink("Edit All Config", "Edit", new { @class = "btn btn-primary" })*@
+    @*@Html.ActionLink("Edit Savings Config", "EditSavings", new { @class = "btn btn-primary" })
+        @Html.ActionLink("Edit Current Config", "EditCurrent", new { @class = "btn btn-primary" })
+        @Html.ActionLink("Edit Loan Config", "EditLoan", new { @class = "btn btn-primary" })*@
+    <a asp-action="EditSavings" asp-controller="AccountTypeManagements" class="btn btn-primary" style="margin-right: 1rem">Edit Savings Config</a>
+    <a asp-action="EditCurrent" asp-controller="AccountTypeManagements" class="btn btn-primary" style="margin-right: 1rem">Edit Current Config</a>
+    <a asp-action="EditLoan" asp-controller="AccountTypeManagements" class="btn btn-primary">Edit Loan Config</a>
+</p>

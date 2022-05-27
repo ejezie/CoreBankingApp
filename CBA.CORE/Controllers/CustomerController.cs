@@ -33,6 +33,8 @@ namespace CBA.WebApi.Controllers
             return View(await context.Customers.ToListAsync());
         }
 
+        
+
         // GET: Consumers/Details/5
         public async Task<ActionResult> Details(int? id)
         {

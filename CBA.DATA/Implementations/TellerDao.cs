@@ -7,6 +7,7 @@ using CBA.CORE.Models;
 using CBA.Data;
 using CBA.DATA.Interfaces;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 
 namespace CBA.DATA.Implementations
 {
@@ -25,15 +26,17 @@ namespace CBA.DATA.Implementations
 
         public async Task<List<TillAccount>> GetAllTellerDetails()
         {
-            var output = new List<TillAccount>();
+            List<TillAccount> output = new List<TillAccount>();
             var tillsWithTellers = GetDbTillAccounts();
             var tellersWithoutTill = await GetTellersWithNoTills();
+            //var tellersWithTill = await GetTellersWithTills();
 
             //adding all tellers without a till account
             foreach (var teller in tellersWithoutTill)
             {
                 output.Add(new TillAccount { UserId = teller.Id, GlAccountID = 0 });
             }
+
             //adding all tellers with a till account
             output.AddRange(tillsWithTellers);
             return output;
@@ -59,7 +62,8 @@ namespace CBA.DATA.Implementations
 
         public List<TillAccount> GetDbTillAccounts()
         {
-            return context.TillAccounts.ToList();
+            //return context.TillAccounts.ToList();
+            return context.TillAccounts.Include(x => x.GlAccount).ToList();
         }
 
         public async Task<List<ApplicationUser>> GetTellersWithNoTills()
@@ -77,6 +81,22 @@ namespace CBA.DATA.Implementations
             }
 
 
+            return result;
+        }
+
+        public async Task<List<ApplicationUser>> GetTellersWithTills()
+        {
+            var tellers = await GetAllTellers();
+            var tillAccounts = context.TillAccounts.ToList();
+            var result = new List<ApplicationUser>();
+
+            foreach (var teller in tellers)
+            {
+                if (tillAccounts.Any(c => c.UserId == teller.Id))
+                {
+                    result.Add(teller);
+                }
+            }
             return result;
         }
     }

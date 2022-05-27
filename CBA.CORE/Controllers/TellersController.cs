@@ -3,13 +3,16 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Net;
 using System.Threading.Tasks;
+using CBA.Core.Models;
 using CBA.CORE.Models;
 using CBA.CORE.Models.ViewModels;
 using CBA.Data;
 using CBA.DATA.Interfaces;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 
 namespace CBA.WebApi.Controllers
 {
@@ -18,18 +21,22 @@ namespace CBA.WebApi.Controllers
         private readonly AppDbContext context;
         private readonly ITellerDao tellerDao;
         private readonly IGLAccountDao gLAccountDao;
+        private readonly UserManager<ApplicationUser> userManager;
 
-        public TellersController(AppDbContext _context, ITellerDao _tellerDao, IGLAccountDao _gLAccountDao)
+        public TellersController(AppDbContext _context, ITellerDao _tellerDao, IGLAccountDao _gLAccountDao, UserManager<ApplicationUser> _userManager)
         {
             context = _context;
             tellerDao = _tellerDao;
             gLAccountDao = _gLAccountDao;
+            userManager = _userManager;
         }
 
         // GET: TillAccounts
         public async Task<ActionResult> Index()
         {
             var tellerDetails = await tellerDao.GetAllTellerDetails();
+            var tellerDetailsString = JsonConvert.SerializeObject(tellerDetails);
+            Console.WriteLine(tellerDetailsString);
             var viewModel = new List<TillAccountViewModel>();
 
             foreach (var detail in tellerDetails)
@@ -50,14 +57,18 @@ namespace CBA.WebApi.Controllers
                 else
                 {
                     var applicationUser = context.Users.Find(detail.UserId);
-                    data = new TillAccountViewModel
-                    {
-                        GLAccountName = detail.GlAccount.AccountName,
-                        Id = detail.Id,
-                        Username = applicationUser.UserName,
-                        AccountBalance = detail.GlAccount.AccountBalance.ToString(CultureInfo.InvariantCulture)
-                    };
-                    viewModel.Add(data);
+                    //if (detail.GlAccount != null)
+                    //{
+                        data = new TillAccountViewModel
+                        {
+                            GLAccountName = detail.GlAccount.AccountName,
+                            Id = detail.Id,
+                            Username = applicationUser.UserName,
+                            AccountBalance = detail.GlAccount.AccountBalance.ToString(),
+                        };
+                        viewModel.Add(data);
+                    //}
+                    
                 }
             }
 
@@ -81,11 +92,11 @@ namespace CBA.WebApi.Controllers
         }
 
         // GET: TillAccounts/Create
-        public ActionResult Create()
+        public async Task<ActionResult> Create()
         {
-            var testList = new List<string> { "a", "b", "c" };
+            //var testList = new List<string> { "a", "b", "c" };
 
-            ViewBag.Users = new SelectList(tellerDao.GetTellersWithNoTills().ToString(), "Id", "UserName");
+            ViewBag.Users = new SelectList(await tellerDao.GetTellersWithNoTills(), "Id", "UserName");
             ViewBag.GlAccountID = new SelectList(gLAccountDao.GetTillsWithoutTellers(), "ID", "AccountName");
             return View();
         }
@@ -101,8 +112,8 @@ namespace CBA.WebApi.Controllers
                 await context.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
-            ViewBag.Users = new SelectList((System.Collections.IEnumerable)tellerDao.GetTellersWithNoTills(), "Id", "UserName", tillAccount.UserId);
-            ViewBag.GlAccountID = new SelectList((System.Collections.IEnumerable)tellerDao.GetTellersWithNoTills(), "ID", "AccountName", tillAccount.GlAccountID);
+            ViewBag.Users = new SelectList(await tellerDao.GetTellersWithNoTills(), "Id", "UserName", tillAccount.UserId);
+            ViewBag.GlAccountID = new SelectList(await tellerDao.GetTellersWithNoTills(), "ID", "AccountName", tillAccount.GlAccountID);
             return View(tillAccount);
         }
 
