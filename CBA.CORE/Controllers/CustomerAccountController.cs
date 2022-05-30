@@ -14,6 +14,7 @@ using CBA.CORE.Models;
 using static CBA.CORE.Enums.Enums;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using CBA.Core.Models;
 
 namespace CBA.WebApi.Controllers
 {
@@ -61,12 +62,20 @@ namespace CBA.WebApi.Controllers
         }
 
         // GET: ConsumerAccounts/Create
-        public ActionResult Create()
+        public async Task<ActionResult> Create(int? id)
         {
+            Customer consumer = await context.Customers.FindAsync(id);
+            CustomerAccount customerId = new CustomerAccount()
+            {
+                CustomerLongID = consumer.CustomerLongID,
+                CustomerName = consumer.FullName,
+                CustomerID = consumer.ID
+            };
+
             ViewBag.BranchID = new SelectList(context.Branches, "ID", "Name");
-            ViewBag.ConsumerID = new SelectList(context.Customers, "ID", "CustomerInfo");
+            //ViewBag.ConsumerID = new SelectListItem(context.Customers.Find(id).ToString(), "CustomerLongID");
             ViewBag.LinkedAccountID = new SelectList(context.CustomerAccounts, "ID", "AccountName");
-            return View();
+            return View(customerId);
         }
 
 
@@ -76,16 +85,20 @@ namespace CBA.WebApi.Controllers
         {
             if (ModelState.IsValid)
             {
+                int customerID = consumerAccount.CustomerID;
                 if (consumerAccount.AccountType == AccountType.Savings ||
                     consumerAccount.AccountType == AccountType.Current)
                 {
                     consumerAccount.AccountBalance = 0;
-                    consumerAccount.AccountNumber =
-                        //_customerAccountLogic.CreateAccountNumber(customerAccount, customerAccount.AccountType);
-                        service.CreateAccountNumber(consumerAccount.AccountType, consumerAccount);
+                    consumerAccount.AccountNumber = "0013443342334";
+                    //await service.CreateAccountNumber(consumerAccount.AccountType, consumerAccount);
 
                     context.CustomerAccounts.Add(consumerAccount);
+                    var transaction = context.Database.BeginTransaction();
+                    context.Database.ExecuteSqlInterpolated($"SET IDENTITY_INSERT CBAdb.CustomerAccounts ON;");
                     await context.SaveChangesAsync();
+                    context.Database.ExecuteSqlInterpolated($"SET IDENTITY_INSERT CBAdb.CustomerAccounts OFF");
+                    transaction.Commit();
                     return RedirectToAction("Index");
                 }
 
@@ -96,7 +109,7 @@ namespace CBA.WebApi.Controllers
             var savcurList = new List<AccountType> { AccountType.Savings, AccountType.Current };
 
             ViewBag.BranchID = new SelectList(context.Branches, "ID", "Name", consumerAccount.BranchID);
-            ViewBag.ConsumerID = new SelectList(context.Customers, "ID", "ConsumerInfo", consumerAccount.CustomerID);
+            //ViewBag.ConsumerID = new SelectListItem(context.Customers.Find(consumer.ID).ToString(), "CustomerLongID");
             ViewBag.LinkedAccountID = new SelectList(context.CustomerAccounts, "ID", "AccountName", consumerAccount.LinkedAccountID);
             return RedirectToAction("CreateLoan");
         }
@@ -184,7 +197,7 @@ namespace CBA.WebApi.Controllers
                     customerAccount.AccountType = AccountType.Loan;
                     customerAccount.AccountNumber =
                         //_customerAccountLogic.CreateAccountNumber(customerAccount, customerAccount.AccountType);
-                        service.CreateAccountNumber(AccountType.Loan, customerAccount);
+                        await service.CreateAccountNumber(AccountType.Loan, customerAccount);
 
 
                     var linkedID = customerAccount.LinkedAccountID.GetValueOrDefault();

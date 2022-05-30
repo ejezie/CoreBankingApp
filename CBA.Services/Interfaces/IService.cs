@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using CBA.Core.Models;
+using CBA.CORE.Enums;
 using CBA.CORE.Models;
 using static CBA.CORE.Enums.Enums;
 
@@ -12,7 +13,7 @@ namespace CBA.Services.Interfaces
         string GeneratePassword();
         string GenerateUserName(string firstname, string secondname);
         Task SendEmailAsync(MailRequest mailRequest);
-        string CreateAccountNumber(AccountType accountType, CustomerAccount customerAccount);
+        Task<string> CreateAccountNumber(Enums.AccountType accountType, CustomerAccount customerAccount);
         void ComputeFixedRepayment(CustomerAccount act, double nyears, double interestRate);
         void ComputeReducingRepayment(CustomerAccount act, double nyears, double interestRate);
         bool CheckIfAccountBalanceIsEnough(CustomerAccount account, decimal amountToDebit);

@@ -52,7 +52,7 @@ namespace CBA.WebApi.Controllers
             return View(consumer);
         }
 
-        public ActionResult Create()
+        public ActionResult Create(int? id)
         {
             return View();
         }

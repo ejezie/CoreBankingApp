@@ -40,7 +40,7 @@
             <td>
                 <a asp-controller="customeraccount" asp-action="CreateSavings" asp-route-id="@item.ID" class="btn btn-primary">CreateSavings</a>
             </td>
-            <td> <a asp-controller="customeraccount" asp-action="Create" class="btn btn-primary">Create Account</a></td>
+            <td> <a asp-controller="customeraccount" asp-action="Create" asp-route-id="@item.ID" class="btn btn-primary">Create Account</a></td>
             <td>
                 <a asp-controller="customeraccount" asp-action="CreateLoan" class="btn btn-primary">CreateLoan</a>
             </td>

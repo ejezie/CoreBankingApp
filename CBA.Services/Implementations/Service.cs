@@ -19,6 +19,7 @@ using System.Linq;
 using CBA.Data;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Identity;
+using Newtonsoft.Json;
 
 namespace CBA.Services.Implementations
 {
@@ -105,17 +106,21 @@ namespace CBA.Services.Implementations
             act.LoanMonthlyPrincipalRepay = act.LoanMonthlyRepay - act.LoanMonthlyInterestRepay;
         }
 
-        public string CreateAccountNumber(Enums.AccountType accountType, CustomerAccount customerAccount)
+        public async Task<string> CreateAccountNumber(Enums.AccountType accountType, CustomerAccount customerAccount)
         {
             //int customerId = customerAccount.CustomerID;
 
-            int consumerId = customerAccount.CustomerID;
-            Customer consumer = customerDao.GetById(consumerId);
+            //int consumerId = customerAccount.CustomerID;
+            //Customer consumer = customerDao.GetById(customerId);
+            Customer consumer = await context.Customers.FindAsync(customerAccount.CustomerID);
+            var DetailsString = JsonConvert.SerializeObject(consumer);
+            Console.WriteLine(".............." + DetailsString + ".....................");
+            //Customer consumer = context.Customers.Find(customerId>);
 
-            if (String.IsNullOrWhiteSpace(consumer.CustomerLongID))
-            {
-                return "";
-            }
+            //if (String.IsNullOrWhiteSpace(consumer.CustomerLongID))
+            //{
+            //    return "";
+            //}
 
             long longId = Convert.ToInt64(consumer.CustomerLongID);
 

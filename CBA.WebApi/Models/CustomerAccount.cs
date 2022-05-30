@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using CBA.Core.Models;
 using static CBA.CORE.Enums.Enums;
 
@@ -7,6 +8,8 @@ namespace CBA.CORE.Models
 {
     public class CustomerAccount
     {
+        [DatabaseGeneratedAttribute(DatabaseGeneratedOption.Identity)]
+        [Key]
         public int ID { get; set; }
 
         [Required]
@@ -45,6 +48,12 @@ namespace CBA.CORE.Models
 
         public int CustomerID { get; set; }
         public virtual Customer Customer { get; set; }
+
+        public string CustomerName { get; set; }
+
+        public string CustomerLongID { get; set; }
+
+
 
 
 

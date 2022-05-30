@@ -50,6 +50,8 @@
     <None Remove="Views\CustomerAccount\" />
     <None Remove="Views\AccountTypeManagements %28copy%29\" />
     <Content Remove="Views\AccountTypeManagements %28copy%29\Edit.cshtml" />
+    <None Remove="Views\GlPostings\" />
+    <None Remove="Views\TellerPostings\" />
   </ItemGroup>
 
   <ItemGroup>
@@ -75,6 +77,8 @@
     <Folder Include="Views\Tellers\" />
     <Folder Include="Views\CustomerAccount\" />
     <Folder Include="Views\AccountTypeManagements\" />
+    <Folder Include="Views\GlPostings\" />
+    <Folder Include="Views\TellerPostings\" />
   </ItemGroup>
   <Target Name="DebugEnsureNodeEnv" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(SpaRoot)node_modules') ">
     <!-- Ensure Node.js is installed -->
